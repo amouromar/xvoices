@@ -1,11 +1,14 @@
-export default function Home() {
+import Home from "./home/page";
+import Footer from "@/components/Footer";
+
+export default function Page() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        X VOICES
+    <div className="font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col row-start-2 items-center sm:items-start">
+        <Home />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <p className="font-semibold">Made by Amour Omar</p>
+      <footer className="sticky bottom-0 row-start-3">
+        <Footer />
       </footer>
     </div>
   );
