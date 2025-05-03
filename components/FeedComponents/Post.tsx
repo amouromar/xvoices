@@ -6,7 +6,7 @@ import Audio from "./Audio/Audio";
 import Engagement from "./Engagement/Engagement";
 const Feed = () => {
   return (
-    <div className="w-full max-h-[500px] flex flex-row gap-4 p-4">
+    <div className="w-full h-fit flex flex-row gap-4 p-4">
       {/* Left */}
       <div className="flex flex-col gap-4">
         <div>

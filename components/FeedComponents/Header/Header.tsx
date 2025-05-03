@@ -9,7 +9,7 @@ const Header = () => {
       <div className="flex flex-row gap-1 items-baseline">
         <div>
           <p className="text-gray-900 font-bold cursor-pointer hover:underline">
-            Elon Musk
+            Amour Omar
           </p>
         </div>
         <div>
@@ -20,11 +20,11 @@ const Header = () => {
         </div>
         <div>
           <p className="text-gray-500 font-extralight hover:underline cursor-pointer">
-            @elonmusk
+            @amouromar
           </p>
         </div>
         <div className="text-gray-500 font-extralight">&#x2022;</div>
-        <div className="text-gray-500 font-extralight">May 29</div>
+        <div className="text-gray-500 font-extralight">May 3</div>
       </div>
       {/* Menu */}
       <div>

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import WaveSurfer from "wavesurfer.js";
+import WaveSurfer, { WaveSurferOptions } from "wavesurfer.js";
+import Controls from "./components/Controls";
 
 const AUDIO_SRC = "/audio/Still Not a Player.mp3";
 
@@ -12,7 +13,10 @@ declare global {
 }
 
 // Helper to extract and exaggerate peaks
-async function getExaggeratedPeaks(audioUrl: string, numPeaks = 200): Promise<number[]> {
+async function getExaggeratedPeaks(
+  audioUrl: string,
+  numPeaks = 200
+): Promise<number[]> {
   const response = await fetch(audioUrl);
   const arrayBuffer = await response.arrayBuffer();
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -37,35 +41,44 @@ async function getExaggeratedPeaks(audioUrl: string, numPeaks = 200): Promise<nu
 
 const speedOptions = [1, 1.5, 2];
 
+// Dummy waveform bar count and height (should match real waveform)
+const DUMMY_BARS = 80;
+const WAVEFORM_HEIGHT = 50;
+
 const Audio = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [speedIdx, setSpeedIdx] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let ws: WaveSurfer | null = null;
     let destroyed = false;
     async function setup() {
       if (containerRef.current) {
-        const peaks = await getExaggeratedPeaks(AUDIO_SRC, 200);
+        const peaks = await getExaggeratedPeaks(AUDIO_SRC, 400);
         if (destroyed) return;
         ws = WaveSurfer.create({
           container: containerRef.current,
           waveColor: "#888", // lighter black for unplayed
           progressColor: "#000", // black for played
           cursorColor: "#000",
+          cursorWidth: 0, // Hide the vertical line
           barWidth: 2,
           barGap: 2,
           barRadius: 0,
-          height: 50,
+          height: WAVEFORM_HEIGHT,
           normalize: false,
-        });
+          partialRender: true, // Smoother animation
+        } as unknown as WaveSurferOptions);
         wavesurferRef.current = ws;
         ws.load(AUDIO_SRC, [peaks]);
-        ws.on("play", () => setIsPlaying(true));
-        ws.on("pause", () => setIsPlaying(false));
+        ws.on("play", () => { setIsPlaying(true); console.log("WaveSurfer: play"); });
+        ws.on("pause", () => { setIsPlaying(false); console.log("WaveSurfer: pause"); });
+        ws.on("ready", () => { setLoading(false); console.log("WaveSurfer: ready"); });
+        ws.on("error", (e) => { console.error("WaveSurfer error", e); });
       }
     }
     setup();
@@ -101,39 +114,37 @@ const Audio = () => {
   };
 
   return (
-    <div className="w-full bg-white rounded-lg p-4 mt-2 mb-2">
-      <div ref={containerRef} className="w-full" />
-      <div className="flex justify-center mt-2 gap-2 flex-wrap">
-        <button
-          onClick={() => handleSkip(-10)}
-          className="px-2 py-2 bg-gray-200 text-black rounded hover:bg-gray-300 transition-colors"
-        >
-          ⏪ 10s
-        </button>
-        <button
-          onClick={handlePlayPause}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        >
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-        <button
-          onClick={() => handleSkip(10)}
-          className="px-2 py-2 bg-gray-200 text-black rounded hover:bg-gray-300 transition-colors"
-        >
-          10s ⏩
-        </button>
-        <button
-          onClick={handleMute}
-          className="px-2 py-2 bg-gray-200 text-black rounded hover:bg-gray-300 transition-colors"
-        >
-          {isMuted ? "Unmute" : "Mute"}
-        </button>
-        <button
-          onClick={handleSpeed}
-          className="px-2 py-2 bg-gray-200 text-black rounded hover:bg-gray-300 transition-colors"
-        >
-          {speedOptions[speedIdx]}x
-        </button>
+    <div className="w-full flex flex-row items-center gap-4 bg-white rounded-lg p-4 mt-2 mb-2">
+      <Controls
+        isPlaying={isPlaying}
+        isMuted={isMuted}
+        speedIdx={speedIdx}
+        speedOptions={speedOptions}
+        onPlayPause={handlePlayPause}
+        onMute={handleMute}
+        onSkip={handleSkip}
+        onSpeed={handleSpeed}
+        disabled={loading}
+      />
+      <div className="w-full flex items-center relative" style={{ minHeight: WAVEFORM_HEIGHT }}>
+        {/* Always render the container for WaveSurfer */}
+        <div ref={containerRef} className="w-full" style={{ height: WAVEFORM_HEIGHT }} />
+        {/* Overlay dummy waveform while loading */}
+        {loading && (
+          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center gap-[2px] animate-pulse pointer-events-none" style={{ zIndex: 2 }}>
+            {Array.from({ length: DUMMY_BARS }).map((_, i) => (
+              <div
+                key={i}
+                className="bg-gray-600 rounded"
+                style={{
+                  width: 2,
+                  height: Math.random() * (WAVEFORM_HEIGHT - 10) + 10,
+                  transition: 'height 0.5s',
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const TopNavigation = () => {
   return (
-    <div className="flex flex-row justify-between p-4">
+    <div className="flex flex-row justify-between p-4 bg-white">
       <div className="flex items-center">
         <Image src="/xlogo.svg" alt="logo" width={32} height={32} />
         <p className="text-2xl font-bold">VOICES</p>
