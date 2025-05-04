@@ -1,6 +1,7 @@
 import React from "react";
 import TopNavigation from "@/components/TopNavigation";
 import Feed from "@/components/Feed";
+import RecordComponent from "@/components/RecordComponent";
 
 export default function Home() {
   return (
@@ -12,6 +13,8 @@ export default function Home() {
       <hr className="text-gray-200" />
 
       <div className="flex-1 overflow-auto">
+        <RecordComponent />
+        <hr className="text-gray-200" />
         <Feed />
       </div>
     </div>

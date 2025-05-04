@@ -8,7 +8,7 @@ const Header = () => {
       {/* Name */}
       <div className="flex flex-row gap-1 items-baseline">
         <div>
-          <p className="text-gray-900 font-bold cursor-pointer hover:underline">
+          <p className="text-sm lg:text-base whitespace-nowrap text-gray-900 font-bold cursor-pointer hover:underline">
             Amour Omar
           </p>
         </div>
@@ -19,12 +19,12 @@ const Header = () => {
           />
         </div>
         <div>
-          <p className="text-gray-500 font-extralight hover:underline cursor-pointer">
+          <p className="text-sm lg:text-base whitespace-nowrap text-gray-500 font-extralight hover:underline cursor-pointer">
             @amouromar
           </p>
         </div>
         <div className="text-gray-500 font-extralight">&#x2022;</div>
-        <div className="text-gray-500 font-extralight">May 3</div>
+        <div className="text-sm lg:text-base whitespace-nowrap text-gray-500 font-extralight">May 3</div>
       </div>
       {/* Menu */}
       <div>

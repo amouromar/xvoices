@@ -17,11 +17,13 @@
     "@mui/material": "^7.0.2",
     "@types/wavesurfer.js": "^6.0.12",
     "axios": "^1.9.0",
+    "lucide-react": "^0.507.0",
     "next": "15.3.1",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.1",
+    "react-textarea-autosize": "^8.5.9",
     "wavesurfer.js": "^7.9.4"
   },
   "devDependencies": {

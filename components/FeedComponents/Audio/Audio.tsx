@@ -75,10 +75,21 @@ const Audio = () => {
         } as unknown as WaveSurferOptions);
         wavesurferRef.current = ws;
         ws.load(AUDIO_SRC, [peaks]);
-        ws.on("play", () => { setIsPlaying(true); console.log("WaveSurfer: play"); });
-        ws.on("pause", () => { setIsPlaying(false); console.log("WaveSurfer: pause"); });
-        ws.on("ready", () => { setLoading(false); console.log("WaveSurfer: ready"); });
-        ws.on("error", (e) => { console.error("WaveSurfer error", e); });
+        ws.on("play", () => {
+          setIsPlaying(true);
+          console.log("WaveSurfer: play");
+        });
+        ws.on("pause", () => {
+          setIsPlaying(false);
+          console.log("WaveSurfer: pause");
+        });
+        ws.on("ready", () => {
+          setLoading(false);
+          console.log("WaveSurfer: ready");
+        });
+        ws.on("error", (e) => {
+          console.error("WaveSurfer error", e);
+        });
       }
     }
     setup();
@@ -126,12 +137,22 @@ const Audio = () => {
         onSpeed={handleSpeed}
         disabled={loading}
       />
-      <div className="w-full flex items-center relative" style={{ minHeight: WAVEFORM_HEIGHT }}>
+      <div
+        className="w-full flex items-center relative"
+        style={{ minHeight: WAVEFORM_HEIGHT }}
+      >
         {/* Always render the container for WaveSurfer */}
-        <div ref={containerRef} className="w-full" style={{ height: WAVEFORM_HEIGHT }} />
+        <div
+          ref={containerRef}
+          className="w-full"
+          style={{ height: WAVEFORM_HEIGHT }}
+        />
         {/* Overlay dummy waveform while loading */}
         {loading && (
-          <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center gap-[2px] animate-pulse pointer-events-none" style={{ zIndex: 2 }}>
+          <div
+            className="absolute left-0 top-0 w-full h-full flex items-center justify-center gap-[2px] animate-pulse pointer-events-none"
+            style={{ zIndex: 2 }}
+          >
             {Array.from({ length: DUMMY_BARS }).map((_, i) => (
               <div
                 key={i}
@@ -139,7 +160,7 @@ const Audio = () => {
                 style={{
                   width: 2,
                   height: Math.random() * (WAVEFORM_HEIGHT - 10) + 10,
-                  transition: 'height 0.5s',
+                  transition: "height 0.5s",
                 }}
               />
             ))}
