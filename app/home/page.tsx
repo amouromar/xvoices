@@ -5,7 +5,7 @@ import RecordComponent from "@/components/RecordComponent";
 
 export default function Home() {
   return (
-    <div className="w-full px-0 lg:px-[650px] flex flex-col h-screen">
+    <div className="w-full px-0 md:px-[100px] lg:px-[650px] flex flex-col h-screen">
       <div className="sticky top-0 z-10">
         <TopNavigation />
       </div>

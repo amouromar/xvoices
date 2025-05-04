@@ -7,7 +7,7 @@ import { useRecording } from "../RecordingContext";
 const Selection: React.FC = () => {
   const { isRecording, startRecording } = useRecording();
   return (
-    <div className="w-full h-fit flex">
+    <div className="w-full h-fit flex mt-2">
       <div className="w-full h-fit flex flex-row items-center gap-4">
         {/* Left */}
         <div className="w-full h-fit flex flex-row gap-4">
@@ -26,8 +26,8 @@ const Selection: React.FC = () => {
           <div className="cursor-pointer">
             <Image src="/location.svg" alt="location" width={18} height={18} />
           </div>
-          <div 
-            className={`cursor-pointer ${isRecording ? 'text-red-500' : ''}`}
+          <div
+            className={`cursor-pointer ${isRecording ? "text-red-500" : ""}`}
             onClick={startRecording}
           >
             <Image

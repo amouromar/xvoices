@@ -5,6 +5,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Globe, Users, Pause, Play, Square, X, RotateCcw } from "lucide-react";
 import { useRecording } from "../RecordingContext";
 import WaveSurfer from "wavesurfer.js";
+import Image from "next/image";
 
 const Textarea: React.FC = () => {
   const [isFocused, setIsFocused] = React.useState(false);
@@ -39,12 +40,14 @@ const Textarea: React.FC = () => {
       }
       wavesurferRef.current = WaveSurfer.create({
         container: waveformRef.current,
-        waveColor: "#d1d5db",
-        progressColor: "#2563eb",
-        cursorColor: "#2563eb",
+        waveColor: "#888", // lighter black for unplayed
+        progressColor: "#000", // black for played
+        cursorColor: "#000",
+        cursorWidth: 0, // Hide the vertical line
         barWidth: 2,
         barRadius: 2,
         height: 48,
+        normalize: false,
       });
       wavesurferRef.current.load(audioUrl);
     }
@@ -59,7 +62,7 @@ const Textarea: React.FC = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleDone = () => {
@@ -114,26 +117,32 @@ const Textarea: React.FC = () => {
       {/* Recording UI */}
       {isRecording && !showWaveform && (
         <div className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={isPaused ? resumeRecording : pauseRecording}
-              className="p-2 rounded-full hover:bg-gray-100"
-            >
-              {isPaused ? <Play size={24} /> : <Pause size={24} />}
-            </button>
-            <span className="text-lg font-medium">{formatTime(recordingTime)}</span>
-            <button
-              onClick={handleDone}
-              className="p-2 rounded-full hover:bg-blue-100 text-blue-600 border border-blue-200"
-            >
-              Done
-            </button>
-            <button
-              onClick={stopRecording}
-              className="p-2 rounded-full hover:bg-gray-100"
-            >
-              <Square size={24} />
-            </button>
+          <div className="flex flex-col items-center gap-4">
+            <div>
+              <span className="text-lg font-medium">
+                {formatTime(recordingTime)}
+              </span>
+            </div>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={isPaused ? resumeRecording : pauseRecording}
+                className="p-2 rounded-full hover:bg-gray-300"
+              >
+                {isPaused ? <Play size={24} /> : <Pause size={24} />}
+              </button>
+              <button
+                onClick={handleDone}
+                className="p-4 rounded-full hover:bg-blue-100 text-blue-600 border border-blue-200"
+              >
+                <Image src="/done.svg" alt="Done" width={24} height={24} />
+              </button>
+              <button
+                onClick={stopRecording}
+                className="p-2 rounded-full hover:bg-red-300"
+              >
+                <Square size={24} className="text-red-500" />
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -149,29 +158,44 @@ const Textarea: React.FC = () => {
             >
               {isPlaying ? <Pause size={24} /> : <Play size={24} />}
             </button>
-            <span className="text-lg font-medium">{formatTime(recordingTime)}</span>
+            <span className="text-lg font-medium">
+              {formatTime(recordingTime)}
+            </span>
           </div>
-          <div className="flex gap-4">
+
+          {/* After recording */}
+          <div className="flex flex-row items-center gap-4">
             <button
               onClick={handleRestartAll}
-              className="flex items-center gap-2 text-red-500 hover:text-red-600"
+              className="flex items-center gap-2 text-red-500 hover:text-red-600 hover:bg-red-100 rounded-full p-2"
             >
-              <RotateCcw size={16} />
-              <span>Record Again</span>
+              <RotateCcw size={24} />
             </button>
             <button
               onClick={handleDiscardAll}
-              className="flex items-center gap-2 text-gray-500 hover:text-gray-600"
+              className="flex items-center gap-2 text-gray-500 hover:text-gray-600 hover:bg-gray-300 rounded-full p-2"
             >
-              <X size={16} />
-              <span>Discard</span>
+              <X size={24} />
             </button>
             <button
               onClick={handlePost}
-              className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-full font-bold hover:bg-blue-600 disabled:opacity-60"
+              className="flex items-center gap-2 bg-green-500 text-white p-2 rounded-full font-bold hover:bg-green-600 disabled:opacity-60"
               disabled={isPosting}
             >
-              {isPosting ? "Posting..." : "Post"}
+              {isPosting ? (
+                <div className="flex items-center gap-2">
+                  <span>Posting...</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/up-arrow.svg"
+                    alt="Post"
+                    width={24}
+                    height={24}
+                  />
+                </div>
+              )}
             </button>
           </div>
         </div>
@@ -179,7 +203,7 @@ const Textarea: React.FC = () => {
 
       <hr
         className={`w-full border-t ${
-          isFocused ? "border-blue-500" : "border-gray-200"
+          isFocused ? "border-gray-400" : "border-gray-200"
         } transition-colors duration-200`}
       />
 
