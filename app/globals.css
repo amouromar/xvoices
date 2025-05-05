@@ -8,35 +8,57 @@ body {
 
 /* Universal Animation Utilities */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98);}
-  to   { opacity: 1; transform: scale(1);}
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @keyframes fadeOut {
-  from { opacity: 1; transform: scale(1);}
-  to   { opacity: 0; transform: scale(0.98);}
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
 }
 .fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.4,0,0.2,1) both;
+  animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .fade-out {
-  animation: fadeOut 0.2s cubic-bezier(0.4,0,0.2,1) both;
+  animation: fadeOut 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 @keyframes focusGlow {
-  from { box-shadow: 0 0 0 0 rgba(37,99,235,0.3);}
-  to   { box-shadow: 0 0 0 4px rgba(37,99,235,0.3);}
+  from {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3);
+  }
+  to {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+  }
 }
 .focus-animated:focus {
-  animation: focusGlow 0.3s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 0 0 4px rgba(37,99,235,0.3);
+  animation: focusGlow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
   outline: none;
-  transition: box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px);}
-  to   { opacity: 1; transform: translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .slide-up {
-  animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1) both;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
 }

@@ -8,7 +8,7 @@ const RecordComponent = () => {
     <div className="w-full h-fit">
       <Input />
     </div>
-  );    
+  );
 };
 
 export default RecordComponent;

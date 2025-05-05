@@ -13,4 +13,4 @@ const Recorder: React.FC = () => {
   );
 };
 
-export default Recorder; 
+export default Recorder;

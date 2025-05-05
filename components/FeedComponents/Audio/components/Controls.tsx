@@ -15,13 +15,13 @@ interface ControlsProps {
 
 const Controls: React.FC<ControlsProps> = ({
   isPlaying,
-//   //   isMuted,
-//   //   speedIdx,
-//   //   speedOptions,
+  //   //   isMuted,
+  //   //   speedIdx,
+  //   //   speedOptions,
   onPlayPause,
-//   //   onMute,
-//   onSkip,
-//   //   onSpeed,
+  //   //   onMute,
+  //   onSkip,
+  //   //   onSpeed,
   disabled,
 }) => (
   <div className="flex justify-center gap-2 flex-wrap">

@@ -24,7 +24,9 @@ const Header = () => {
           </p>
         </div>
         <div className="text-gray-500 font-extralight">&#x2022;</div>
-        <div className="text-sm lg:text-base whitespace-nowrap text-gray-500 font-extralight">May 3</div>
+        <div className="text-sm lg:text-base whitespace-nowrap text-gray-500 font-extralight">
+          May 3
+        </div>
       </div>
       {/* Menu */}
       <div>

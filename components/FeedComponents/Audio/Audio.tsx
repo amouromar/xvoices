@@ -15,7 +15,7 @@ declare global {
 // Helper to extract and exaggerate peaks
 async function getExaggeratedPeaks(
   audioUrl: string,
-  numPeaks = 200
+  numPeaks = 200,
 ): Promise<number[]> {
   const response = await fetch(audioUrl);
   const arrayBuffer = await response.arrayBuffer();

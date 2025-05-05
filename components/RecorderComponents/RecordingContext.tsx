@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface RecordingContextType {
   isRecording: boolean;
@@ -17,11 +24,14 @@ interface RecordingContextType {
   handleDiscard: () => void;
 }
 
-const RecordingContext = createContext<RecordingContextType | undefined>(undefined);
+const RecordingContext = createContext<RecordingContextType | undefined>(
+  undefined,
+);
 
 export const useRecording = () => {
   const ctx = useContext(RecordingContext);
-  if (!ctx) throw new Error("useRecording must be used within a RecordingProvider");
+  if (!ctx)
+    throw new Error("useRecording must be used within a RecordingProvider");
   return ctx;
 };
 
@@ -58,7 +68,7 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
         if (e.data.size > 0) chunks.push(e.data);
       };
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const blob = new Blob(chunks, { type: "audio/webm" });
         setAudioUrl(URL.createObjectURL(blob));
       };
       mediaRecorder.start();
@@ -67,19 +77,25 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
       setIsRecording(true);
       setAudioUrl(null);
     } catch (err) {
-      console.error('Error accessing microphone:', err);
+      console.error("Error accessing microphone:", err);
     }
   };
 
   const pauseRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "recording"
+    ) {
       mediaRecorderRef.current.pause();
       setIsPaused(true);
     }
   };
 
   const resumeRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'paused') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "paused"
+    ) {
       mediaRecorderRef.current.resume();
       setIsPaused(false);
     }
@@ -88,7 +104,9 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
       mediaRecorderRef.current = null;
       setIsRecording(false);
       setIsPaused(false);
@@ -141,4 +159,4 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </RecordingContext.Provider>
   );
-}; 
+};

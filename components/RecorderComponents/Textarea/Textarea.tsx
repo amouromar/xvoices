@@ -16,13 +16,13 @@ const Textarea: React.FC = () => {
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const [showWaveform, setShowWaveform] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const {
     isRecording,
     isPaused,
     recordingTime,
     audioUrl,
-    isPlaying,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     startRecording,
     pauseRecording,
@@ -50,6 +50,14 @@ const Textarea: React.FC = () => {
         normalize: false,
       });
       wavesurferRef.current.load(audioUrl);
+      
+      // Add event listeners for play/pause states
+      wavesurferRef.current.on('play', () => {
+        setIsPlaying(true);
+      });
+      wavesurferRef.current.on('pause', () => {
+        setIsPlaying(false);
+      });
     }
     return () => {
       if (wavesurferRef.current) {
@@ -184,7 +192,7 @@ const Textarea: React.FC = () => {
             >
               {isPosting ? (
                 <div className="flex items-center gap-2">
-                  <span>Posting...</span>
+                  <span>...</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
