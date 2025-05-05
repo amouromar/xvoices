@@ -49,12 +49,12 @@ const Textarea: React.FC = () => {
         normalize: false,
       });
       wavesurferRef.current.load(audioUrl);
-      
+
       // Add event listeners for play/pause states
-      wavesurferRef.current.on('play', () => {
+      wavesurferRef.current.on("play", () => {
         setIsPlaying(true);
       });
-      wavesurferRef.current.on('pause', () => {
+      wavesurferRef.current.on("pause", () => {
         setIsPlaying(false);
       });
     }
@@ -68,7 +68,7 @@ const Textarea: React.FC = () => {
 
   const handlePlayback = () => {
     if (!wavesurferRef.current) return;
-    
+
     try {
       if (isPlaying) {
         wavesurferRef.current.pause();
@@ -76,7 +76,7 @@ const Textarea: React.FC = () => {
         wavesurferRef.current.play();
       }
     } catch (error) {
-      console.error('Error playing audio:', error);
+      console.error("Error playing audio:", error);
     }
   };
 
@@ -200,12 +200,51 @@ const Textarea: React.FC = () => {
             </button>
             <button
               onClick={handlePost}
-              className="flex items-center gap-2 bg-green-500 text-white p-2 rounded-full font-bold hover:bg-green-600 disabled:opacity-60"
+              className="flex items-center gap-2 bg-green-500 text-white p-2 rounded-full font-bold hover:bg-green-600 disabled:opacity-100"
               disabled={isPosting}
             >
               {isPosting ? (
-                <div className="flex items-center gap-2">
-                  <span>...</span>
+                <div className="flex items-center gap-2 rounded-full">
+                  <span>
+                    <svg width="60" height="20" viewBox="0 0 120 30">
+                      <circle cx="30" cy="15" r="10" fill="#ffffff">
+                        <animate
+                          attributeName="cy"
+                          from="15"
+                          to="15"
+                          dur="0.6s"
+                          begin="0s"
+                          repeatCount="indefinite"
+                          values="15;5;15"
+                          keyTimes="0;0.5;1"
+                        ></animate>
+                      </circle>
+                      <circle cx="60" cy="15" r="10" fill="#ffffff">
+                        <animate
+                          attributeName="cy"
+                          from="15"
+                          to="15"
+                          dur="0.6s"
+                          begin="0.2s"
+                          repeatCount="indefinite"
+                          values="15;5;15"
+                          keyTimes="0;0.5;1"
+                        ></animate>
+                      </circle>
+                      <circle cx="90" cy="15" r="10" fill="#ffffff">
+                        <animate
+                          attributeName="cy"
+                          from="15"
+                          to="15"
+                          dur="0.6s"
+                          begin="0.4s"
+                          repeatCount="indefinite"
+                          values="15;5;15"
+                          keyTimes="0;0.5;1"
+                        ></animate>
+                      </circle>
+                    </svg>
+                  </span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
