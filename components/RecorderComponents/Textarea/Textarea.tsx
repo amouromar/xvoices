@@ -28,7 +28,6 @@ const Textarea: React.FC = () => {
     pauseRecording,
     resumeRecording,
     stopRecording,
-    handlePlayback,
     handleRestart,
     handleDiscard,
   } = useRecording();
@@ -66,6 +65,20 @@ const Textarea: React.FC = () => {
       }
     };
   }, [showWaveform, audioUrl]);
+
+  const handlePlayback = () => {
+    if (!wavesurferRef.current) return;
+    
+    try {
+      if (isPlaying) {
+        wavesurferRef.current.pause();
+      } else {
+        wavesurferRef.current.play();
+      }
+    } catch (error) {
+      console.error('Error playing audio:', error);
+    }
+  };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
