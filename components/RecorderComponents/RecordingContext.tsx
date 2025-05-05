@@ -60,17 +60,96 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      // Request higher quality audio
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          channelCount: 1, // Mono for better quality
+          sampleRate: 48000, // Higher sample rate
+          sampleSize: 16, // Higher bit depth
+        },
+      });
+
+      // Create audio context for processing
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)({
+        sampleRate: 48000,
+      });
+      const source = audioContext.createMediaStreamSource(stream);
+      
+      // Create processing nodes
+      // 1. Initial gain control for input level
+      const inputGain = audioContext.createGain();
+      inputGain.gain.value = 0.8; // Slightly reduce input to prevent clipping
+      
+      // 2. Noise gate to reduce background noise
+      const noiseGate = audioContext.createDynamicsCompressor();
+      noiseGate.threshold.value = -50; // Only process sounds above -50dB
+      noiseGate.ratio.value = 20; // Strong reduction
+      noiseGate.attack.value = 0.001; // Fast attack
+      noiseGate.release.value = 0.1; // Quick release
+      
+      // 3. Main compressor for voice enhancement
+      const compressor = audioContext.createDynamicsCompressor();
+      compressor.threshold.value = -20; // Less aggressive threshold
+      compressor.knee.value = 10; // Smoother compression
+      compressor.ratio.value = 4; // More natural compression ratio
+      compressor.attack.value = 0.005; // Slightly slower attack for more natural sound
+      compressor.release.value = 0.1; // Quick release for better dynamics
+      
+      // 4. EQ for voice enhancement
+      const eq = audioContext.createBiquadFilter();
+      eq.type = 'peaking';
+      eq.frequency.value = 2500; // Boost presence frequencies
+      eq.gain.value = 3; // Slight boost
+      eq.Q.value = 1; // Moderate bandwidth
+      
+      // 5. High-pass filter to remove rumble
+      const highpass = audioContext.createBiquadFilter();
+      highpass.type = 'highpass';
+      highpass.frequency.value = 80; // Remove low rumble
+      
+      // 6. Low-pass filter with higher frequency for more clarity
+      const lowpass = audioContext.createBiquadFilter();
+      lowpass.type = 'lowpass';
+      lowpass.frequency.value = 12000; // Preserve more high frequencies
+      
+      // 7. Final gain stage for output level
+      const outputGain = audioContext.createGain();
+      outputGain.gain.value = 1.1; // Slight boost to final output
+      
+      // Connect the audio processing chain
+      source.connect(inputGain);
+      inputGain.connect(noiseGate);
+      noiseGate.connect(compressor);
+      compressor.connect(eq);
+      eq.connect(highpass);
+      highpass.connect(lowpass);
+      lowpass.connect(outputGain);
+      outputGain.connect(audioContext.destination);
+      
+      // Create MediaRecorder with processed stream
+      const processedStream = audioContext.createMediaStreamDestination().stream;
+      const mediaRecorder = new MediaRecorder(processedStream, {
+        mimeType: 'audio/webm;codecs=opus',
+        audioBitsPerSecond: 192000 // Even higher bitrate for better quality
+      });
+      
       mediaRecorderRef.current = mediaRecorder;
       const chunks: BlobPart[] = [];
+      
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) chunks.push(e.data);
       };
+      
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: "audio/webm" });
+        const blob = new Blob(chunks, { type: 'audio/webm' });
         setAudioUrl(URL.createObjectURL(blob));
+        // Clean up audio context
+        audioContext.close();
       };
+      
       mediaRecorder.start();
       setRecordingTime(0);
       setIsPaused(false);
